@@ -1,0 +1,5 @@
+*.exe
+
+.idea
+__pycache__
+/ghostdriver.log
