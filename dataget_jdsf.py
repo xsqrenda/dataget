@@ -4,12 +4,12 @@
 # import requests
 # import os
 # from urllib.parse import urljoin
-# import re,uuid
-# from op_oracle import *
-import datetime
+# import re
+from op_oracle import *
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common import exceptions
+
 
 def allcity_zhuzhai(paimai_status):
     chrome_options = Options()
@@ -23,7 +23,8 @@ def allcity_zhuzhai(paimai_status):
         links = browser.find_element_by_xpath('//a[text()='+paimai_status+']')
         links.click()
         results_num = browser.find_element_by_xpath('//div[@class="results-num"]').find_element_by_tag_name('em').text
-        print(datetime.datetime.now(), paimai_status, results_num)
+        # print(datetime.datetime.now(), paimai_status, results_num)
+        wr_jdsf_zhuzhai("全国", eval(paimai_status), results_num)
     except exceptions.NoSuchElementException:
         raise
     except exceptions.ElementNotVisibleException:
@@ -33,8 +34,8 @@ def allcity_zhuzhai(paimai_status):
 
 
 if __name__ == '__main__':
-    allcity_zhuzhai('"不限"')
-    allcity_zhuzhai('"拍卖中"')
+    # allcity_zhuzhai('"不限"')
+    # allcity_zhuzhai('"拍卖中"')
     allcity_zhuzhai('"预告中"')
 
 # browser.close()
