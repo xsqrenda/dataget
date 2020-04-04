@@ -6,19 +6,36 @@
 # from urllib.parse import urljoin
 # import re,uuid
 # from op_oracle import *
+import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--disable-gpu')
-browser = webdriver.Chrome(chrome_options=chrome_options)
-rooturl = 'https://auction.jd.com/sifa_list.html?childrenCateId=12728'
-browser.get(rooturl)
-links = browser.find_element_by_xpath('//a[text()="预告中"]')
-links.click()
-em = browser.find_element_by_xpath('//div[@class="results-num"]').find_element_by_tag_name('em').text
-browser.close()
-print(em)
+from selenium.common import exceptions
+
+def allcity_zhuzhai(paimai_status):
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+    #上面三行代码就是为了将Chrome不弹出界面，实现无界面爬取
+    browser = webdriver.Chrome(chrome_options=chrome_options)
+    rooturl = 'https://auction.jd.com/sifa_list.html?childrenCateId=12728'
+    try:
+        browser.get(rooturl)
+        links = browser.find_element_by_xpath('//a[text()='+paimai_status+']')
+        links.click()
+        results_num = browser.find_element_by_xpath('//div[@class="results-num"]').find_element_by_tag_name('em').text
+        print(datetime.datetime.now(), paimai_status, results_num)
+    except exceptions.NoSuchElementException:
+        raise
+    except exceptions.ElementNotVisibleException:
+        raise
+    finally:
+        browser.close()
+
+
+if __name__ == '__main__':
+    allcity_zhuzhai('"不限"')
+    allcity_zhuzhai('"拍卖中"')
+    allcity_zhuzhai('"预告中"')
 
 # browser.close()
 # rooturl为首页地址，m为起始页，n为结束页
